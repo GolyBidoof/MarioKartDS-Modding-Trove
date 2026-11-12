@@ -179,6 +179,10 @@ These patch units are not homebrew programs: they are linked into the retail ARM
 
 An existing devkitARM installation is used as the compiler if `DEVKITARM`/`DEVKITPRO` is set; its libnds headers are not used. libnds' `u8`/`u16`/`u32`/`f32` names are aliases for the same EABI types (`uint8_t`/`uint16_t`/`uint32_t`/`float`); the patch uses the standard names directly and does not include libnds.
 
+## Contributing
+
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md) for the repository's development patterns: where format findings, headers, tools, mod data, debug routes, tests, licences and screenshots belong.
+
 ## AI-assisted contributions
 
 Contributions made with generative AI tools are welcome. Disclose the tools used in the pull request or commit message, keep the change reviewable, and make sure you have the right to contribute the code and any assets. Every contribution is reviewed for correctness, licensing and provenance. The project itself was developed with substantial AI involvement; see [AI disclosure](#ai-disclosure).

@@ -14,3 +14,5 @@ These notes are written for this project. Generic Nitro/BMG layouts follow publi
 The generic implementations live in `tools/nds.py`, `tools/bmg.py`, `tools/bmgset.py`, `tools/mods.py` and `tools/patch.py`. Game-specific detection lives with the mod that needs it, e.g. `mods/options-cc/profile.py`.
 
 The Nitro format structures are available as reusable C headers in [`../include/`](../include/). Mod-specific headers live with the mod, e.g. `mods/options-cc/source/options_class_row.h.tmpl`.
+
+For where new findings, tools, headers, mods and debug routes should go, see [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
