@@ -1,0 +1,27 @@
+/*
+ * Mario Kart DS Modding Trove
+ * mods/options-cc/source/options.h.tmpl — Options mod addresses and ids
+ * SPDX-License-Identifier: MIT
+ * Layout: docs/options-class-row.md
+ *
+ * Addresses below are resolved from the input ARM9 by tools/patch.py
+ * (detection in mods/options-cc/profile.py).
+ */
+#pragma once
+
+#include "options_class_row.h"
+
+#define CLASS_ROW_COUNT        {{profile.row_count}}
+#define CLASS_MESSAGE_IDS_PTR  {{profile.msg_ptr}}
+#define OPTION_TO_CC_PTR       {{profile.option_to_cc}}
+#define CC_TO_OPTION_PTR       {{profile.cc_to_option}}
+#define UNLOCK_CATEGORY_A_PTR  {{profile.unlock_a}}
+#define UNLOCK_CATEGORY_B_PTR  {{profile.unlock_b}}
+#define MIRROR_LOAD_SITE       {{profile.mirror_load}}
+#define MIRROR_COMPARE_SITE    {{profile.mirror_compare}}
+
+enum {
+    MSG_200CC = {{new_id0}},
+    MSG_250CC = {{new_id1}},
+    MSG_300CC = {{new_id2}},
+};

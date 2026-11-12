@@ -1,0 +1,22 @@
+out/
+.tools/
+build/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Never commit game data.
+*.nds
+*.srl
+*.bmg
+*.carc
+*.narc
+*.sav
+
+# Debug captures and logs.
+dbg_*.bin
+dbg_*.bmp
+dbg_*.log
+
+# Generated route screenshots.
+debug/generated/

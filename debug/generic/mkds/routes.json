@@ -1,0 +1,138 @@
+{
+  "vs_rules_250cc": {
+    "description": "Skip title, enter Multiplayer VS, advance through character/kart selects, open VS rules and select 250cc.",
+    "start": "After boot; pause first.",
+    "steps": [
+      {
+        "action": "pause"
+      },
+      {
+        "action": "scene",
+        "value": 1
+      },
+      {
+        "action": "wait",
+        "frames": 45,
+        "observed_menu": 1,
+        "name": "mode_select"
+      },
+      {
+        "action": "press",
+        "buttons": "DOWN",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "press",
+        "buttons": "DOWN",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "press",
+        "buttons": "A",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 45,
+        "observed_menu": 8,
+        "name": "vs_character_select"
+      },
+      {
+        "action": "press",
+        "buttons": "A",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 30,
+        "observed_menu": 9,
+        "name": "vs_kart_select"
+      },
+      {
+        "action": "wait",
+        "frames": 30,
+        "note": "kart-select screen settle"
+      },
+      {
+        "action": "press",
+        "buttons": "A",
+        "frames": 2,
+        "note": "A1: select kart"
+      },
+      {
+        "action": "wait",
+        "frames": 30
+      },
+      {
+        "action": "press",
+        "buttons": "A",
+        "frames": 2,
+        "note": "A2: confirm kart; longer animation"
+      },
+      {
+        "action": "wait",
+        "frames": 90,
+        "observed_menu": 10,
+        "name": "vs_rules"
+      },
+      {
+        "action": "press",
+        "buttons": "RIGHT",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "press",
+        "buttons": "RIGHT",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "press",
+        "buttons": "RIGHT",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "press",
+        "buttons": "RIGHT",
+        "frames": 2
+      },
+      {
+        "action": "wait",
+        "frames": 15
+      },
+      {
+        "action": "screenshot",
+        "screen": "lower",
+        "native": true,
+        "path": "dbg_vs_rules_250cc.bmp"
+      }
+    ],
+    "notes": [
+      "Scene 1 settles in 45 frames; mode-select transitions in 45; class-row changes in 15.",
+      "From the default mode-select position, two DOWN presses then A select VS; one DOWN enters Time Attack and RIGHT is cursor-position dependent.",
+      "Kart select uses A1 then A2; A2 has the longer animation, so wait 90 frames after it.",
+      "Do not force menu_state 10 directly; navigate naturally.",
+      "CLASS starts at 50cc; four RIGHT presses select 250cc.",
+      "After confirmation focus moves to CPU KART; UP returns focus to CLASS."
+    ]
+  }
+}

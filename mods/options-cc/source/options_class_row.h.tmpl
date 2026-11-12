@@ -1,0 +1,66 @@
+/*
+ * Mario Kart DS Modding Trove
+ * mods/options-cc/source/options_class_row.h.tmpl — MKDS Options/engine constants
+ * SPDX-License-Identifier: MIT
+ * Notes: docs/options-class-row.md
+ *
+ * Per-region addresses are observations, not ABI constants; the tools find
+ * them by pattern. This header holds the shared values only. Engine speed
+ * values live in engine.json.
+ */
+#pragma once
+
+#include <stdint.h>
+
+/* EABI binary32; libnds calls this f32. */
+typedef float mkds_f32;
+_Static_assert(sizeof(mkds_f32) == 4, "EABI float is 32-bit");
+
+#define MKDS_Q12_ONE 4096u
+#define MKDS_Q12(value) ((uint32_t)((value) * (mkds_f32)MKDS_Q12_ONE + 0.5f))
+
+#define MKDS_MAX_SPEED_50CC  ((mkds_f32){{profile.max_speed_50}})
+#define MKDS_MAX_SPEED_100CC ((mkds_f32){{profile.max_speed_100}})
+#define MKDS_MAX_SPEED_150CC ((mkds_f32){{profile.max_speed_150}})
+#define MKDS_MAX_SPEED_200CC ((mkds_f32){{profile.max_speed_200}})
+#define MKDS_MAX_SPEED_250CC ((mkds_f32){{profile.max_speed_250}})
+#define MKDS_MAX_SPEED_300CC ((mkds_f32){{profile.max_speed_300}})
+
+#define MKDS_OPTIONS_CLASS_ROW_OPTIONS 7u
+
+enum mkds_message_id {
+    MKDS_MSG_50CC = 5,
+    MKDS_MSG_100CC = 6,
+    MKDS_MSG_150CC = 7,
+    MKDS_MSG_MIRROR = 8,
+};
+
+enum mkds_cc_mode {
+    MKDS_CC_MODE_50 = 0,
+    MKDS_CC_MODE_100 = 1,
+    MKDS_CC_MODE_150 = 2,
+    MKDS_CC_MODE_200 = 3,
+    MKDS_CC_MODE_250 = 4,
+    MKDS_CC_MODE_300 = 5,
+};
+
+enum mkds_class_position {
+    MKDS_CLASS_50 = 0,
+    MKDS_CLASS_100 = 1,
+    MKDS_CLASS_150 = 2,
+    MKDS_CLASS_200 = 3,
+    MKDS_CLASS_250 = 4,
+    MKDS_CLASS_300 = 5,
+    MKDS_CLASS_MIRROR = 6,
+};
+
+enum mkds_unlock_category {
+    MKDS_UNLOCK_50 = 0,
+    MKDS_UNLOCK_100 = 1,
+    MKDS_UNLOCK_150 = 2,
+};
+
+enum mkds_mirror_patch {
+    MKDS_MIRROR_OPTION_LOAD = 0x2506,
+    MKDS_MIRROR_OPTION_COMPARE = 0x2806,
+};

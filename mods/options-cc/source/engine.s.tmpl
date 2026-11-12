@@ -1,0 +1,78 @@
+@ Mario Kart DS Modding Trove
+@ mods/options-cc/source/engine.s.tmpl — engine CC switch
+@ SPDX-License-Identifier: MIT
+@ Layout: docs/options-class-row.md
+@ r5 scales maxSpeed (Q12); r4 adds to drift.
+@ Engine values come from mods/options-cc/engine.json.
+@ Only emitted for a stock switch; an already redirected site is left alone.
+
+#include "ncp.h"
+
+.arm
+
+.equ CC_MODE_50,  0
+.equ CC_MODE_100, 1
+.equ CC_MODE_150, 2
+.equ CC_MODE_200, 3
+.equ CC_MODE_250, 4
+.equ CC_MODE_300, 5
+
+.equ MAX_SPEED_50,  {{profile.max_speed_50_q12}}
+.equ MAX_SPEED_100, {{profile.max_speed_100_q12}}
+.equ MAX_SPEED_150, {{profile.max_speed_150_q12}}
+.equ MAX_SPEED_200, {{profile.max_speed_200_q12}}
+.equ MAX_SPEED_250, {{profile.max_speed_250_q12}}
+.equ MAX_SPEED_300, {{profile.max_speed_300_q12}}
+
+.equ DRIFT_50_MVN,  {{profile.drift_50_mvn}}   @ -40
+.equ DRIFT_100_MVN, {{profile.drift_100_mvn}}  @ -20
+
+ncp_jump({{profile.engine_hook}})
+    LDR     R0, ={{profile.engine_config}}
+    LDR     R0, [R0]
+    LDR     R0, [R0, #0x10]
+    CMP     R0, #CC_MODE_50
+    BEQ     cc50
+    CMP     R0, #CC_MODE_100
+    BEQ     cc100
+    CMP     R0, #CC_MODE_200
+    BEQ     cc200
+    CMP     R0, #CC_MODE_250
+    BEQ     cc250
+    CMP     R0, #CC_MODE_300
+    BEQ     cc300
+    B       cc150
+
+cc50:
+    LDR     R5, =MAX_SPEED_50
+    MVN     R4, #DRIFT_50_MVN
+    B       apply
+
+cc100:
+    LDR     R5, =MAX_SPEED_100
+    MVN     R4, #DRIFT_100_MVN
+    B       apply
+
+cc150:
+    LDR     R5, =MAX_SPEED_150
+    MOV     R4, #{{profile.drift_150}}
+    B       apply
+
+cc200:
+    LDR     R5, =MAX_SPEED_200
+    MOV     R4, #{{profile.drift_200}}
+    B       apply
+
+cc250:
+    LDR     R5, =MAX_SPEED_250
+    MOV     R4, #{{profile.drift_250}}
+    B       apply
+
+cc300:
+    LDR     R5, =MAX_SPEED_300
+    MOV     R4, #{{profile.drift_300}}
+    B       apply
+
+apply:
+    LDR     R3, ={{profile.engine_resume}}
+    BX      R3

@@ -1,0 +1,57 @@
+/*
+ * Mario Kart DS Modding Trove
+ * mods/options-cc/source/options.c.tmpl — Options class-row tables
+ * SPDX-License-Identifier: MIT
+ * Layout: docs/options-class-row.md
+ */
+#include "ncp.h"
+#include "options.h"
+#include <stdint.h>
+
+#define NCP_USED __attribute__((used))
+/* Keep ncp_over's stringified address as a symbol name, not an expression. */
+#define NCP_OVER_(address) ncp_over(address)
+#define NCP_OVER(address) NCP_OVER_(address)
+
+static const uint16_t
+cc_class_message_ids[MKDS_OPTIONS_CLASS_ROW_OPTIONS] NCP_USED = {
+    MKDS_MSG_50CC, MKDS_MSG_100CC, MKDS_MSG_150CC,
+    MSG_200CC, MSG_250CC, MSG_300CC,
+    MKDS_MSG_MIRROR,
+};
+
+static const uint32_t
+cc_option_to_cc[MKDS_OPTIONS_CLASS_ROW_OPTIONS] NCP_USED = {
+    MKDS_CC_MODE_50, MKDS_CC_MODE_100, MKDS_CC_MODE_150,
+    MKDS_CC_MODE_200, MKDS_CC_MODE_250, MKDS_CC_MODE_300,
+    MKDS_CC_MODE_150,
+};
+
+static const uint32_t cc_cc_to_option[6] NCP_USED = {
+    MKDS_CLASS_50, MKDS_CLASS_100, MKDS_CLASS_150,
+    MKDS_CLASS_200, MKDS_CLASS_250, MKDS_CLASS_300,
+};
+
+static const uint32_t cc_unlock_category[6] NCP_USED = {
+    MKDS_UNLOCK_50, MKDS_UNLOCK_100, MKDS_UNLOCK_150,
+    MKDS_UNLOCK_150, MKDS_UNLOCK_150, MKDS_UNLOCK_150,
+};
+
+NCP_OVER(CLASS_ROW_COUNT) uint16_t cc_class_row_count NCP_USED =
+    MKDS_OPTIONS_CLASS_ROW_OPTIONS;
+
+NCP_OVER(CLASS_MESSAGE_IDS_PTR) uint32_t cc_class_message_ids_ptr NCP_USED =
+    (uint32_t)cc_class_message_ids;
+NCP_OVER(OPTION_TO_CC_PTR) uint32_t cc_option_to_cc_ptr NCP_USED =
+    (uint32_t)cc_option_to_cc;
+NCP_OVER(CC_TO_OPTION_PTR) uint32_t cc_cc_to_option_ptr NCP_USED =
+    (uint32_t)cc_cc_to_option;
+NCP_OVER(UNLOCK_CATEGORY_A_PTR) uint32_t cc_unlock_category_a NCP_USED =
+    (uint32_t)cc_unlock_category;
+NCP_OVER(UNLOCK_CATEGORY_B_PTR) uint32_t cc_unlock_category_b NCP_USED =
+    (uint32_t)cc_unlock_category;
+
+NCP_OVER(MIRROR_LOAD_SITE) uint16_t cc_mirror_option_load NCP_USED =
+    MKDS_MIRROR_OPTION_LOAD;
+NCP_OVER(MIRROR_COMPARE_SITE) uint16_t cc_mirror_option_compare NCP_USED =
+    MKDS_MIRROR_OPTION_COMPARE;

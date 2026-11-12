@@ -1,0 +1,23 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Compile debug layer
+        run: |
+          make -C debug/recomp check
+          python -m py_compile debug/recomp/client/*.py debug/generic/transport/*.py debug/generic/mkds/*.py debug/recomp/mkds/*.py

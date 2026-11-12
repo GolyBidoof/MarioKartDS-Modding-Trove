@@ -1,0 +1,19 @@
+{
+  "id": "options-cc",
+  "name": "Options class row: 200/250/300cc",
+  "description": "Appends 200cc, 250cc and 300cc to the Options/VS-rules class row and, on stock EU/US/JP, extends the engine CC switch.",
+  "profile": "profile.py",
+  "sources": [
+    {"file": "source/options_class_row.h.tmpl"},
+    {"file": "source/options.h.tmpl"},
+    {"file": "source/options.c.tmpl"},
+    {"file": "source/engine.s.tmpl", "when": {"engine_mode": "patch"}}
+  ],
+  "bmg": {
+    "archives": "data/Scene/Menu*.carc",
+    "member": "rule.bmg",
+    "messages": "messages",
+    "language_prefixes": ["MenuDL_", "Menu_"]
+  },
+  "verify": "verify.py"
+}
