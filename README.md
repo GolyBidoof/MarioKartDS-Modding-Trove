@@ -30,11 +30,9 @@ The patches use pattern detection, so stock EU, US and JP layouts are recognized
 
 This repository currently ships **one mod**. The 200cc, 250cc and 300cc choices are class options inside it, not separate mods.
 
-| id | name | scope |
-|---|---|---|
-| [`options-cc`](mods/options-cc/README.md) | Options class row: 200/250/300cc | Appends 200cc, 250cc and 300cc to the Options/VS-rules class row, localizes the names in the ROM's BMGs, and extends the engine CC switch on stock EU/US/JP images. |
-
-![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png)
+| id | name | scope | screenshot |
+|---|---|---|---|
+| [`options-cc`](mods/options-cc/README.md) | Options class row: 200/250/300cc | Appends 200cc, 250cc and 300cc to the Options/VS-rules class row, localizes the names in the ROM's BMGs, and extends the engine CC switch on stock EU/US/JP images. | ![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png) |
 
 The screenshot shows game content © Nintendo and documents the patch only.
 
