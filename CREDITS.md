@@ -2,7 +2,7 @@
 
 ## AI disclosure
 
-This repository was developed with substantial generative-AI involvement. Substantial portions of the code, tests, documentation and patch templates were drafted or rewritten by **DeepSeek v4.1 Flash** through the **Command Code** coding agent, under human direction and review.
+This repository was developed with substantial generative-AI involvement. Substantial portions of the code, tests, documentation and patch templates were drafted or rewritten with AI assistance, under human direction and review.
 
 AI systems are tools, not authors; the human contributors are named below. The patches have been built and structurally verified, but this is not a correctness or fitness guarantee.
 
@@ -57,4 +57,4 @@ The debug server/client in `debug/` was extracted from `DS-Kart-Recompiled` (MIT
 
 - **GolyBidoof** — project author and maintainer: https://github.com/GolyBidoof
 
-Other contributors have asked to remain unnamed; see the "Contributors and privacy" note in [README.md](README.md).
+Other contributors have asked to remain unnamed.
