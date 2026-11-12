@@ -1,85 +1,59 @@
 # Mario Kart DS Modding Trove
 
-A public-toolchain framework for Mario Kart DS ROM mods: reusable Nitro/BMG/NCPatcher tools, independent mods, and a ROM-agnostic debug layer. Maintained by [GolyBidoof](https://github.com/GolyBidoof).
+A public-toolchain framework for Mario Kart DS mods, with pieces that are useful outside MKDS too. Maintained by [GolyBidoof](https://github.com/GolyBidoof).
 
-```text
-tools/        shared framework: ROM readers, BMG repair, NCPatcher driver, mod loader
-mods/         self-contained mods
-debug/        debug server, RSP transport/proxy, MKDS layer, GDB/Ghidra/native guides
-docs/         format and research notes
-include/      reusable C format headers
-apply.py      one-command entry point
-bootstrap.py  first-run tool bootstrap
-```
+## What you can reuse
 
-Mods are independent: select any subset and the framework merges them into one NCPatcher pass. It refuses a run where two mods patch the same address or append the same BMG label.
+- **Mod framework:** independent NCPatcher-based mods, with BMG label planning, conflict checks and autoload-aware verification.
+- **Nitro/BMG tools:** NDS header/FNT/FAT, BLZ, NARC/CARC, LZ77 and BMG repair/append code in `tools/`.
+- **C headers:** matching NDS, NARC, BLZ and BMG declarations in `include/nitro/`.
+- **Debug layer:** GDB RSP transport, persistent proxy, scripted MKDS navigation and screenshots. The generic layer works with [melonDS](https://github.com/melonDS-emu/melonDS) and the [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) static recompiler.
+- **Research:** format notes and MKDS table observations in `docs/`.
 
-No ROMs or BMG files are stored here. BMG content is read from the input ROM and written back through NCPatcher. Use a ROM you legally own. Mario Kart DS and Nintendo DS are trademarks of Nintendo; this project is not affiliated with or endorsed by Nintendo.
+No ROMs or BMG files are stored here. Use a ROM you legally own. Mario Kart DS and Nintendo DS are trademarks of Nintendo; this project is not affiliated with or endorsed by Nintendo.
 
 ## AI disclosure
 
-This repository was developed with substantial generative-AI involvement. Substantial portions of the framework code, tests, documentation and patch templates were drafted or rewritten with AI assistance, under human direction and review. AI systems are tools, not authors; human contributors are named under [Credits](#credits). The patches have been built and structurally verified, but that is not a correctness or fitness guarantee: review the code and test a patched ROM before use. Contributions made with AI tools are welcome under the same disclosure rule.
+Substantial portions of the code, tests, documentation and patch templates were drafted or rewritten with generative AI under human direction and review. AI systems are tools, not authors; the maintainer is credited below. The patches are structurally verified but not correctness-guaranteed, so review and test before use.
 
 ## Quick start
 
-You need Python 3.9+ and, on first run, an internet connection. Everything else is fetched or built automatically if missing.
-
 ```sh
 python3 apply.py /path/to/game.nds
 ```
 
-The patched ROM is written to `out/`. On macOS you can double-click `run.command`; on Linux, `./run.sh game.nds`; on Windows, `run.bat game.nds`. Run `python3 bootstrap.py --check` to see what was found. The first run builds NCPatcher and downloads a GNU Arm toolchain if `arm-none-eabi-gcc` is not already available.
+The patched ROM is written to `out/`. Wrappers: `run.command` on macOS, `run.sh` on Linux, `run.bat` on Windows. Run `python3 bootstrap.py --check` to inspect the toolchain. First run builds NCPatcher and downloads GNU Arm GCC if needed.
 
-## Compatibility
-
-The patches apply to any Mario Kart DS version whose Options class row uses the stock layout. Tables and instruction sites are found by pattern, not by a hardcoded build, so EU, US and JP retail images are recognized. They also apply on top of an already-modded `.nds`: if the engine CC switch is already redirected, the engine source is skipped and the Options/BMG patches are applied as a delta, leaving the existing redirect byte-identical.
-
-Apply to the original ROM, not to one of the tool's own outputs. The verifier checks tables, BMG bytes and branch targets; it does not run the game. Test a patched ROM in an emulator or on hardware before distributing it.
+The patches use pattern detection, so stock EU, US and JP layouts are recognized. They can also apply over an already-modded ROM when the engine switch is already redirected. The verifier is structural, not a runtime test.
 
 ## Mods
 
-| id | what it does | screenshot |
+This repository currently ships **one mod**. The 200cc, 250cc and 300cc choices are class options inside it, not separate mods.
+
+| id | name | scope |
 |---|---|---|
-| `options-cc` | Appends 200cc / 250cc / 300cc to the Options class row and adds localized class names to the ROM's BMGs. See `mods/options-cc/README.md`. | ![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png) |
+| [`options-cc`](mods/options-cc/README.md) | Options class row: 200/250/300cc | Appends 200cc, 250cc and 300cc to the Options/VS-rules class row, localizes the names in the ROM's BMGs, and extends the engine CC switch on stock EU/US/JP images. |
 
-`options-cc` targets the Options list, not the 2×2 GP class-select tiles. It is the example mod; new mods go under `mods/` and are selected with `--mod` or joined with `--all-mods`. The screenshot shows game content © Nintendo and is included only to document the patch.
+![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png)
 
-## Usage
+The screenshot shows game content © Nintendo and documents the patch only.
 
-```sh
-python3 apply.py /path/to/game.nds
-python3 apply.py --rom-dir /path/to/roms --all-mods --out-dir out
-python3 apply.py /path/to/game.nds --mod options-cc --dry-run
-```
+## Documentation and development
 
-`--mod` is repeatable and defaults to all mods. Outputs are `<name>_<mod ids>.nds`. Scratch files live under `OUT/.work` and are removed on success; `--keep-work` keeps them.
+The [format notes](docs/README.md) cover Nitro/NDS filesystems, BLZ, NARC/CARC, LZ77, BMG banks, ARM9 autoloads and the Options class row. The [debug-layer map](debug/README.md) covers recomp, melonDS, GDB/Ghidra and the shared MKDS layer. See [CONTRIBUTING.md](CONTRIBUTING.md) for where new findings, headers, tools, mods and routes belong.
 
-## Development
+Development needs Python 3.9+ and `arm-none-eabi-gcc` via `PATH`, `DEVKITARM`/`DEVKITPRO` or `ARM_GCC`/`ARM_TOOLCHAIN`. Patch units target the retail ARM9: use NCPatcher's `ncp.h` and `<stdint.h>`, not libnds headers.
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the module layout, where findings and headers belong, mod conventions, debug-route rules, and the definition of done.
+Run `python3 -m unittest discover -s tests`; CI covers Python 3.9 and 3.12.
 
-Requirements are Python 3.9+ and `arm-none-eabi-gcc` on `PATH`, via `DEVKITARM`/`DEVKITPRO`, or via `ARM_GCC`/`ARM_TOOLCHAIN`; otherwise the bootstrap downloads xPack. The first run also needs `git`, CMake, a C++20 compiler and internet access unless NCPatcher and the toolchain are already installed. Locations can be overridden with `NCPATCHER`, `NCPATCHER_SDK`, `ARM_GCC`, `ARM_TOOLCHAIN`, `DEVKITARM`/`DEVKITPRO` or `PATH`.
+## Ecosystem
 
-Patch units link into the retail ARM9. Use NCPatcher's `ncp.h`, `<stdint.h>` and the mod's own headers. Do not include libnds/devkitARM headers in patch units: they assume a homebrew runtime, IRQ setup and ABI that the retail game does not provide.
+- [NCPatcher](https://github.com/TheGameratorT/NCPatcher) — ROM/archive patching and patch build pipeline, by [TheGameratorT](https://github.com/TheGameratorT).
+- [Mario Kart Toolbox](https://github.com/HaroohiePals/MarioKartToolbox) — archive/BMG data model, by [HaroohiePals](https://github.com/HaroohiePals).
+- [melonDS](https://github.com/melonDS-emu/melonDS) — emulator and GDB stub compatibility.
+- [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) — static recompilation and origin of the debug layer, by [AlonsoTlol](https://github.com/AlonsoTlol).
+- [Ghidra](https://ghidra-sre.org/) — optional live GDB debugger.
+- [GBATEK](https://problemkaputt.de/gbatek.htm) — NDS hardware and format reference, by Martin Korth.
+- [ndstool](https://github.com/devkitPro/ndstool) — Nitro filesystem tooling, by devkitPro.
 
-## Documentation
-
-The [`docs/`](docs/README.md) notes cover the Nitro/NDS filesystem, BLZ, NARC/CARC, LZ77, BMG message banks, ARM9 autoloads and the Options class row. Matching C declarations live in [`include/`](include/), and the debug-layer map is in [`debug/README.md`](debug/README.md).
-
-The generic debug layer works with [melonDS](https://github.com/melonDS-emu/melonDS) through its GDB stub and with the [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) static recompilation stack. Screenshots and native-C debugging are recomp-only; melonDS uses the shared transport and proxy.
-
-## Tests
-
-```sh
-python3 -m unittest discover -s tests
-```
-
-The tests build a synthetic BMG in code; they never read a game file. CI runs them on Python 3.9 and 3.12.
-
-## Credits
-
-Maintainer: [GolyBidoof](https://github.com/GolyBidoof). Debug-layer origin: [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled). Format references, tool authors, licences and full AI disclosure: [CREDITS.md](CREDITS.md).
-
-## Licence
-
-MIT. See `LICENSE`. Third-party notices and the DS-Kart-Recompiled MIT text are in `CREDITS.md` and `LICENSES/`.
+Full tool licences, format references and debug provenance are in [CREDITS.md](CREDITS.md). The project is MIT-licensed; third-party notices are in `LICENSES/`.
