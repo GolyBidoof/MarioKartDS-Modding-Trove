@@ -18,9 +18,7 @@ No ROMs or BMG files are stored here. BMG content is read from the input ROM and
 
 ## AI disclosure
 
-This repository was developed with substantial generative-AI involvement. Substantial portions of the framework code, tests, documentation and patch templates were drafted or rewritten with AI assistance, under human direction and review. The patches have been built and structurally verified, but that is not a correctness or fitness guarantee. Review the code and test on an emulator or hardware before using a patched ROM.
-
-AI systems are tools, not authors; the human contributors are named under [Credits](#credits). Contributions made with AI tools are welcome under the same disclosure rule.
+This repository was developed with substantial generative-AI involvement. Substantial portions of the framework code, tests, documentation and patch templates were drafted or rewritten with AI assistance, under human direction and review. AI systems are tools, not authors; human contributors are named under [Credits](#credits). The patches have been built and structurally verified, but that is not a correctness or fitness guarantee: review the code and test a patched ROM before use. Contributions made with AI tools are welcome under the same disclosure rule.
 
 ## Quick start
 
@@ -66,11 +64,9 @@ Patch units link into the retail ARM9. Use NCPatcher's `ncp.h`, `<stdint.h>` and
 
 ## Documentation
 
-- [Format notes](docs/README.md)
-- [Debug layers](debug/README.md)
-- [Ghidra GDB bridge](debug/generic/ghidra/README.md)
-- [C format headers](include/)
-- [Contributing patterns](CONTRIBUTING.md)
+The [`docs/`](docs/README.md) notes cover the Nitro/NDS filesystem, BLZ, NARC/CARC, LZ77, BMG message banks, ARM9 autoloads and the Options class row. Matching C declarations live in [`include/`](include/), and the debug-layer map is in [`debug/README.md`](debug/README.md).
+
+The generic debug layer works with [melonDS](https://github.com/melonDS-emu/melonDS) through its GDB stub and with the [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) static recompilation stack. Screenshots and native-C debugging are recomp-only; melonDS uses the shared transport and proxy.
 
 ## Tests
 
