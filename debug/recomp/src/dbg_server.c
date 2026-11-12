@@ -34,7 +34,9 @@ static void dbg_sleep_ms(int ms) { Sleep((DWORD)ms); }
 #include <netinet/in.h>
 #include <pthread.h>
 #include <strings.h>
+#include <sys/select.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 typedef int dbg_socket;
