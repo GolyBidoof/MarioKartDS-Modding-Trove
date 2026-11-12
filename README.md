@@ -24,7 +24,7 @@ python3 apply.py /path/to/game.nds
 
 The patched ROM is written to `out/`. Wrappers: `run.command` on macOS, `run.sh` on Linux, `run.bat` on Windows. Run `python3 bootstrap.py --check` to inspect the toolchain. First run builds NCPatcher and downloads GNU Arm GCC if needed.
 
-The patches use pattern detection, so stock EU, US and JP layouts are recognized. They can also apply over an already-modded ROM when the engine switch is already redirected. The verifier is structural, not a runtime test.
+Compatible with retail MKDS (E), (U), and (J) ROMs and custom distributions that retain the stock Options layout. Detection is pattern-based, not tied to a specific build; already-modified ROMs are supported when the engine switch is already redirected. The verifier is structural, not a runtime test.
 
 ## Mods
 
@@ -32,7 +32,7 @@ This repository currently ships **one mod**. The 200cc, 250cc and 300cc choices 
 
 | id | name | scope | screenshot |
 |---|---|---|---|
-| [`options-cc`](mods/options-cc/README.md) | Options class row: 200/250/300cc | Appends 200cc, 250cc and 300cc to the Options/VS-rules class row, localizes the names in the ROM's BMGs, and extends the engine CC switch on stock EU/US/JP images. | ![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png) |
+| [`options-cc`](mods/options-cc/README.md) | Options class row: 200/250/300cc | Appends 200cc, 250cc and 300cc to the Options/VS-rules class row, localizes the names in the ROM's BMGs, and extends the engine CC switch on MKDS (E), (U), and (J) ROMs and compatible custom distributions. | ![VS rules showing 250cc](mods/options-cc/options-250cc-rules.png) |
 
 The screenshot shows game content © Nintendo and documents the patch only.
 

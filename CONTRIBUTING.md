@@ -27,7 +27,7 @@ This file is the durable guide for humans and AI agents working in this reposito
 ## Constraints
 
 - Use public tools only: NCPatcher, `arm-none-eabi-gcc`, Python standard library, and optional Mario Kart Toolbox for inspection.
-- Do not add ROMs, BMG files, archives, extracted game assets, or project-specific headers.
+- Do not add ROM files, internal game files, archives, extracted game assets, or project-specific headers.
 - Do not move build-specific patchers, address tables, or toolchain files into the generic framework.
 - Do not move MKDS-specific knowledge into `tools/` merely for convenience. If two mods need it, give each mod its own profile/data or add a documented generic format layer.
 - Use EABI fixed-width types from `<stdint.h>` in C. Do not include libnds headers in patch units.

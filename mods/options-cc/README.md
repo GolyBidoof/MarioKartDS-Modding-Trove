@@ -16,7 +16,7 @@ The screenshot shows game content © Nintendo and is included only to document t
 - Option→CC, CC→option and CC→unlock tables extended.
 - Mirror moves from option 3 to option 6.
 - `200cc`, `250cc`, `300cc` appended to every `Menu*/rule.bmg` the ROM ships, with per-language labels (`200 cc` in Spanish, `200 ccm` in German).
-- On stock EU/US/JP the engine CC switch is extended so the new modes scale speed and drift. On an already-modded image whose switch is already redirected, the engine source is skipped (`"when": {"engine_mode": "patch"}` in `mod.json`) and only the Options/BMG patches apply.
+- On MKDS (E), (U), and (J) ROMs and compatible custom distributions, the engine CC switch is extended so the new modes scale speed and drift. On an already-modded image whose switch is already redirected, the engine source is skipped (`"when": {"engine_mode": "patch"}` in `mod.json`) and only the Options/BMG patches apply.
 
 ## Engine values
 
@@ -32,11 +32,11 @@ The labels are in `messages/` and are selected by the archive language:
 | `Menu_es` | `200 cc`, `250 cc`, `300 cc` |
 | `Menu_ge` | `200 ccm`, `250 ccm`, `300 ccm` |
 
-The stock labels are `50 cc` in Spanish and `50 ccm` in German, so the new labels match each language. `MenuDL_*` variants use the same language. The tool reads the ROM's own BMG, strips earlier copies of the labels, and appends them at ids 24-26 (the first free ids in the stock 24-message banks). No BMG files are stored in the repo.
+The stock labels are `50 cc` in Spanish and `50 ccm` in German, so the new labels match each language. `MenuDL_*` variants use the same language. The tool reads the ROM's own message data, strips earlier copies of the labels, and appends them at ids 24-26 (the first free ids in the stock 24-message banks). No internal game files are stored in the repo.
 
 ## Compatibility
 
-The mod applies to any Mario Kart DS version whose Options class row uses the stock layout, including already-modded `.nds` files. The existing engine redirect on a pre-modded image is left byte-identical.
+Compatible with MKDS (E), (U), and (J) ROMs and custom distributions that retain the stock Options layout, including already-modded `.nds` files. The existing engine redirect on a pre-modded image is left byte-identical.
 
 ## Files
 
