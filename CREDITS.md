@@ -44,7 +44,7 @@ The generic headers and format notes are independent declarations of publicly do
 - **Mario Kart Toolbox** (HaroohiePals) — archive and BMG data model: https://github.com/HaroohiePals/MarioKartToolbox
 - **NCPatcher** (TheGameratorT) — Nitro archive patching: https://github.com/TheGameratorT/NCPatcher
 
-The Options/engine addresses and byte patterns are this project's observations, documented in `docs/options-class-row.md`; they are not copied from a symbol file or another mod.
+The Options/engine addresses and byte patterns are this project's observations, documented in `docs/options-class-row.md`.
 
 ## Debug layer
 

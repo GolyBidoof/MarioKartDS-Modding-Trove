@@ -27,13 +27,13 @@ This file is the durable guide for humans and AI agents working in this reposito
 ## Constraints
 
 - Use public tools only: NCPatcher, `arm-none-eabi-gcc`, Python standard library, and optional Mario Kart Toolbox for inspection.
-- Do not add ROMs, BMG files, archives, extracted game assets, or private project headers/symbol maps.
-- Do not add private project build patchers, linker scripts, relocation artifacts, or private symbol/header conventions.
+- Do not add ROMs, BMG files, archives, extracted game assets, or project-specific headers.
+- Do not move build-specific patchers, address tables, or toolchain files into the generic framework.
 - Do not move MKDS-specific knowledge into `tools/` merely for convenience. If two mods need it, give each mod its own profile/data or add a documented generic format layer.
 - Use EABI fixed-width types from `<stdint.h>` in C. Do not include libnds headers in patch units.
 - Name C concepts, not registers. Put raw instruction encodings in assembly or research docs and explain them there.
 - Keep emitted patch constants derived from the mod's data (for example `engine.json` floats converted to Q12 at build time).
-- Comments only where the behavior is non-obvious: ABI/ABI-adjacent repair, relocation, formula scale, or an instruction-site quirk.
+- Comments only where the behavior is non-obvious: ABI repair, address fixups, formula scale, or an instruction-site quirk.
 - Never commit generated output, caches, screenshots without a documentation purpose, or local absolute paths.
 
 ## Mod independence
