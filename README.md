@@ -10,7 +10,7 @@ A public-toolchain framework for Mario Kart DS mods, with pieces that are useful
 - **Debug layer:** GDB RSP transport, persistent proxy, scripted MKDS navigation and screenshots. The generic layer works with [melonDS](https://github.com/melonDS-emu/melonDS) and the [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) static recompiler.
 - **Research:** format notes and MKDS table observations in `docs/`.
 
-No ROMs or BMG files are stored here. Use a ROM you legally own. Mario Kart DS and Nintendo DS are trademarks of Nintendo; this project is not affiliated with or endorsed by Nintendo.
+No ROM files or internal game files are stored here. Use a ROM you legally own. Mario Kart DS and Nintendo DS are trademarks of Nintendo; this project is not affiliated with or endorsed by Nintendo.
 
 ## AI disclosure
 
