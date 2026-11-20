@@ -36,7 +36,7 @@ The FAT is an array of `(start, end)` file offsets; `end` is inclusive.
 
 Nitro's backwards LZ. The last four bytes hold the number of bytes the image grows by when decompressed. The eight bytes before that hold a header whose top byte is the compressed-header length and whose low 24 bits are the encoded length. Bytes before the encoded tail are stored plain; the tail is decoded backwards from the end.
 
-The decompressed ARM9 is recognised by the module-params magic `0xDEC00621 0x2106C0DE`. A plain ARM9 can contain that magic too, so use the module params' `compressed_static_end` field (see [ARM9 autoloads](arm9-autoloads.md)) to decide whether a compressed tail exists.
+The decompressed ARM9 is recognised by the module-params magic `0xDEC00621 0x2106C0DE`. A plain ARM9 can contain that magic too, so use the module params' `compressed_static_end` field (see [ARM9 autoloads](../arm9-autoloads.md)) to decide whether a compressed tail exists.
 
 ## NARC
 
@@ -63,3 +63,7 @@ LZ77 (type `0x10`) layout:
 - Set bit: two bytes, `length = high nibble + 3`, `displacement = low 12 bits + 1` (a back-reference into the output).
 
 `tools/nds.py` reads both plain and LZ77-wrapped NARCs. NCPatcher recompresses an edited `.carc` in the same wrapper it arrived in.
+
+## Stock MKDS header constants
+
+`include/nitro/mkds/rom/rom.h` records the concrete AMCP header values used by the stock image: ARM9/ARM7 load offsets and sizes, FNT/FAT offsets and sizes, overlay-table offsets, banner offset, card-control words and autoload addresses. Use the symbolic `MKDS_ROM_*` names instead of copying literal offsets into tools or mods; the header also notes the stock image's `rom_size` field versus its actual 0x02000000-byte file size.

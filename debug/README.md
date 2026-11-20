@@ -2,6 +2,10 @@
 
 `debug/` is split by what each piece talks to. The custom MKDS layer is generic because it sits on a backend; screenshots are only available from the recomp text backend.
 
+Start with [`WORKFLOWS.md`](WORKFLOWS.md) for end-to-end recipes: choosing a
+channel, launching a target, running a scripted flow, asserting on memory, and
+capturing screenshots.
+
 The recomp debug layer originated in [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled).
 
 | Layer | Directory | Used where |
@@ -9,6 +13,7 @@ The recomp debug layer originated in [DS-Kart-Recompiled](https://github.com/Alo
 | Generic | `generic/` | recomp RSP, melonDS, GDB/Ghidra, scripted clients |
 | Recomp | `recomp/` | static recompilation only: text protocol, RSP server, screenshots, native C |
 | melonDS | `melonDS/` | melonDS-only ports, config and connection notes |
+| Examples | `examples/` | runnable flows over the text/RSP layers |
 
 ## What to use where
 
@@ -21,6 +26,7 @@ The recomp debug layer originated in [DS-Kart-Recompiled](https://github.com/Alo
 | Ghidra live target | Ghidra GDB agent -> proxy -> melonDS/recomp RSP |
 | Native recompiled-C debugging | `recomp/native/` (lldb/gdb) |
 | Scene/menu over any backend | `generic/mkds/cli.py` |
+| Scripted debug flow | `recomp/client/run_scenario.py` + `examples/menu_flow.py` |
 
 ## Generic
 
@@ -39,6 +45,21 @@ See [`generic/README.md`](generic/README.md).
 - `recomp/examples/` — host adapter and BMP/screenshot templates.
 - `recomp/native/` — native lldb/gdb path for recompiled C.
 - `recomp/Makefile` — compile check.
+
+## Examples
+
+- `examples/menu_flow.py` — pause, skip to the menu, assert `mode_select`,
+  capture both screens, and print the menu after one navigation step.
+- `recomp/examples/scenario_example.py` — snapshots, screenshots and a frame
+  wait.
+- `recomp/examples/host_example.c` — minimal `DbgHost` adapter.
+
+## Workflows
+
+[`WORKFLOWS.md`](WORKFLOWS.md) covers the full loop and the field notes:
+proxy attach/pause behavior, function-entry breakpoints, menu timing, grid
+navigation, and screenshot/memory cross-checks.
+
 
 See [`recomp/README.md`](recomp/README.md).
 

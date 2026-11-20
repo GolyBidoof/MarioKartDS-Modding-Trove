@@ -1,0 +1,19 @@
+/* banner.h — message ids for Scene/WLMenu_us_arc/banner.bmg. SPDX-License-Identifier: MIT */
+#pragma once
+
+typedef enum {
+    MKDS_BMG_BANNER_MARIO_KART_DS = 0,
+    MKDS_BMG_BANNER_MSG_001 = 1,
+    MKDS_BMG_BANNER_CREATE_GROUP = 2,
+    MKDS_BMG_BANNER_MSG_003 = 3,
+    MKDS_BMG_BANNER_MSG_004 = 4,
+    MKDS_BMG_BANNER_CURRENT_RACERS = 5,
+    MKDS_BMG_BANNER_CUT_OFF = 6,
+    MKDS_BMG_BANNER_MSG_007 = 7,
+    MKDS_BMG_BANNER_MSG_008 = 8,
+    MKDS_BMG_BANNER_MSG_009 = 9,
+    MKDS_BMG_BANNER_MSG_010 = 10,
+    MKDS_BMG_BANNER_AN_ERROR_HAS_OCCURRED = 11,
+} MkdsBmgBannerMessage;
+
+#define MKDS_BMG_BANNER_COUNT 12u

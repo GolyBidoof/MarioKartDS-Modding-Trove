@@ -6,7 +6,7 @@ A public-toolchain framework for Mario Kart DS mods, with pieces that are useful
 
 - **Mod framework:** independent NCPatcher-based mods, with BMG label planning, conflict checks and autoload-aware verification.
 - **Nitro/BMG tools:** NDS header/FNT/FAT, BLZ, NARC/CARC, LZ77 and BMG repair/append code in `tools/`.
-- **C headers:** matching NDS, NARC, BLZ and BMG declarations in `include/nitro/`.
+- **C headers:** NDS, NARC, BLZ, BMG, G2D/G3D, SDAT, save and MKDS course/UI/race declarations in `include/nitro/`.
 - **Debug layer:** GDB RSP transport, persistent proxy, scripted MKDS navigation and screenshots. The generic layer works with [melonDS](https://github.com/melonDS-emu/melonDS) and the [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Recompiled) static recompiler.
 - **Research:** format notes and MKDS table observations in `docs/`.
 
@@ -28,7 +28,7 @@ Compatible with retail MKDS (E), (U), and (J) ROMs and custom distributions that
 
 ## Mods
 
-This repository currently ships **one mod**. The 200cc, 250cc and 300cc choices are class options inside it, not separate mods.
+This repository currently ships the `options-cc` mod. The 200cc, 250cc and 300cc choices are class options inside it.
 
 | id | name | scope | screenshot |
 |---|---|---|---|
@@ -38,7 +38,7 @@ The screenshot shows game content © Nintendo and documents the patch only.
 
 ## Documentation and development
 
-The [format notes](docs/README.md) cover Nitro/NDS filesystems, BLZ, NARC/CARC, LZ77, BMG banks, ARM9 autoloads and the Options class row. The [debug-layer map](debug/README.md) covers recomp, melonDS, GDB/Ghidra and the shared MKDS layer. See [CONTRIBUTING.md](CONTRIBUTING.md) for where new findings, headers, tools, mods and routes belong.
+The [format notes](docs/README.md) cover Nitro/NDS filesystems, BLZ, NARC/CARC, LZ77, BMG banks, ARM9 autoloads and the Options class row. The [tooling API](docs/tools.md) covers the overlay reader and Thumb `BL` decoder. The [debug-layer map](debug/README.md) covers recomp, melonDS, GDB/Ghidra and the shared MKDS layer. See [CONTRIBUTING.md](CONTRIBUTING.md) for where new findings, headers, tools, mods and routes belong.
 
 Development needs Python 3.9+ and `arm-none-eabi-gcc` via `PATH`, `DEVKITARM`/`DEVKITPRO` or `ARM_GCC`/`ARM_TOOLCHAIN`. Patch units target the retail ARM9: use NCPatcher's `ncp.h` and `<stdint.h>`, not libnds headers.
 

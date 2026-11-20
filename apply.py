@@ -44,7 +44,7 @@ def run_one(rom: Path, out_dir: Path, work_dir: Path, keep_work: bool,
     print(f"   mods: {', '.join(ids)}")
 
     arm9, base = arm9_from_nds(str(rom))
-    profiles = {mod.id: patch.load_profile(mod, arm9, base)
+    profiles = {mod.id: patch.load_profile(mod, arm9, base, rom)
                 for mod in selected}
     print(f"   ARM9 {base:#010x}")
     for mod in selected:
@@ -89,7 +89,7 @@ def run_one(rom: Path, out_dir: Path, work_dir: Path, keep_work: bool,
     for mod in selected:
         context = patch.ModContext(profile=profiles[mod.id], image=image,
                                    base=base, new_ids=plan.ids[mod.id],
-                                   tools=tools)
+                                   tools=tools, rom_path=output)
         patch.verify_mod(mod, context)
 
     out_dir.mkdir(parents=True, exist_ok=True)

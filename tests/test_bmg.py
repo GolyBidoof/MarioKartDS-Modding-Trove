@@ -5,7 +5,8 @@
 import struct
 import unittest
 
-from tools.bmg import Bmg, append_labels, base_string_count, strip_labels
+from tools.bmg import (Bmg, append_labels, base_string_count, render_message,
+                       strip_labels)
 
 LABELS = ("LABEL_A", "LABEL_B", "LABEL_C")
 
@@ -25,6 +26,39 @@ def make_bmg(messages):
         if len(data) & 1:
             data += b"\0"
 
+    inf = bytearray(b"INF1" + b"\0\0\0\0"
+                    + struct.pack("<HH", len(messages), 4) + b"\0" * 4)
+    for off in offsets:
+        inf += struct.pack("<I", off)
+    while (0x20 + len(inf)) % 0x20:
+        inf += b"\0"
+    struct.pack_into("<I", inf, 4, len(inf))
+
+    dat = bytearray(b"DAT1" + b"\0\0\0\0" + data)
+    while len(dat) % 4:
+        dat += b"\0"
+    struct.pack_into("<I", dat, 4, len(dat))
+
+    out = header + inf + dat
+    struct.pack_into("<I", out, 0x08, len(out))
+    return bytes(out)
+
+
+def make_bmg_units(messages):
+    """Build a BMG from lists of UTF-16 code units (escapes included)."""
+    header = bytearray(0x20)
+    header[:4] = b"MESG"
+    header[4:8] = b"bmg1"
+    struct.pack_into("<I", header, 0x0C, 2)
+    struct.pack_into("<I", header, 0x10, 2)
+
+    data = bytearray()
+    offsets = []
+    for units in messages:
+        offsets.append(len(data))
+        for unit in units:
+            data += struct.pack("<H", unit)
+        data += b"\0\0"
     inf = bytearray(b"INF1" + b"\0\0\0\0"
                     + struct.pack("<HH", len(messages), 4) + b"\0" * 4)
     for off in offsets:
@@ -87,6 +121,27 @@ class BmgTests(unittest.TestCase):
                          ["ALPHA", "BETA", "GAMMA", *labels])
         self.assertEqual(strip_labels(Bmg(out).strings, labels),
                          ["ALPHA", "BETA", "GAMMA"])
+
+    def test_escape_arguments_do_not_truncate_messages(self):
+        units = [ord(ch) for ch in "Drive through all "]
+        units += [0x1A, 0xFF08, 0x0000, 0x0001, ord("5")]
+        units += [0x1A, 0xFF08, 0x0000, 0x0000]
+        units += [ord(ch) for ch in " numbered gates"]
+        raw = make_bmg_units([units])
+        text = Bmg(raw).strings[0]
+        self.assertEqual(
+            render_message(text),
+            "Drive through all <1A:FF08:65536>5<1A:FF08:0> numbered gates")
+
+    def test_other_escape_lengths(self):
+        units = [0x1A, 0x0106, 0x000A]
+        units += [ord(ch) for ch in " button "]
+        units += [0x1A, 0x0108, 0x0004, 0x002A]
+        units += [ord(ch) for ch in "text"]
+        raw = make_bmg_units([units])
+        self.assertEqual(
+            render_message(Bmg(raw).strings[0]),
+            "<1A:0106:000A> button <1A:0108:0004,002A>text")
 
     def test_two_label_sets_can_share_a_base(self):
         labels = ["ALPHA", "BETA"]

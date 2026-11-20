@@ -1,10 +1,4 @@
-/*
- * Mario Kart DS Modding Trove
- * include/nitro/narc.h — NARC/CARC and Nitro LZ77
- * SPDX-License-Identifier: MIT
- * Notes: docs/nitro.md
- * References: GBATEK, Mario Kart Toolbox; see ../CREDITS.md
- */
+/* narc.h — NARC/CARC and Nitro LZ77. SPDX-License-Identifier: MIT */
 #pragma once
 
 #include <stddef.h>
@@ -17,7 +11,7 @@
 #define NARC_BTNF_MAGIC "BTNF"
 #define NARC_GMIF_MAGIC "GMIF"
 #define NARC_BOM 0xFEFFu
-#define NARC_HEADER_SIZE 0x10u
+#define NARC_HEADER_SIZE 16u
 #define NARC_BTAF_OFFSET 0x10u
 #define NARC_BTAF_ENTRY_OFFSET 0x0Cu
 
@@ -37,10 +31,7 @@ typedef struct {
     uint16_t reserved;
 } NarcBtafHeader;
 
-typedef struct {
-    uint32_t start;
-    uint32_t end;
-} NarcFatEntry;
+typedef NdsFatEntry NarcFatEntry;
 
 typedef struct {
     char magic[4];
@@ -56,12 +47,16 @@ typedef NdsFntRoot NarcFntRoot;
 typedef NdsFntDirEntry NarcFntDirEntry;
 
 _Static_assert(sizeof(NarcHeader) == NARC_HEADER_SIZE, "NARC header");
+_Static_assert(offsetof(NarcHeader, bom) == 0x04, "NARC BOM");
+_Static_assert(offsetof(NarcHeader, file_size) == 0x08, "NARC file size");
+_Static_assert(offsetof(NarcHeader, section_count) == 0x0E, "NARC section count");
 _Static_assert(sizeof(NarcBtafHeader) == 12, "BTAF header");
+_Static_assert(offsetof(NarcBtafHeader, count) == 0x08, "BTAF count");
 _Static_assert(sizeof(NarcFatEntry) == 8, "NARC FAT entry");
 _Static_assert(sizeof(NarcBtnfHeader) == 8, "BTNF header");
 _Static_assert(sizeof(NarcGmifHeader) == 8, "GMIF header");
 
-#define NITRO_LZ77_TYPE 0x10u
+#define NITRO_LZ77_TYPE 16u
 
 static inline uint8_t nitro_lz77_type(const uint8_t *data)
 {

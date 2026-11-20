@@ -46,7 +46,7 @@ The selected/confirmed class moves focus to `CPU KART`; press `UP` to return foc
 
 ## What the automation learned
 
-- From the default mode-select position, one `DOWN` + `A` lands in Time Attack (`ta_mode_select`, state 20); two `DOWN` presses + `A` land in VS (`vs_character_select`, state 8). Do not use `RIGHT`: its result varied with the prior cursor position (one observation was GP, another VS).
+- From the default mode-select position, one `DOWN` + `A` lands in Time Trials (`ta_mode_select`, state 20); two `DOWN` presses + `A` land in VS (`vs_character_select`, state 8). Do not use `RIGHT`: its result varied with the prior cursor position (one observation was GP, another VS).
 - `vs_kart_select` uses two confirmation presses. The second kart-select confirmation (`A2`) has the longer animation: wait about 90 frames after it before expecting `vs_rules`.
 - The CLASS row accepts `RIGHT` navigation without needing to open a submenu; a 15-frame wait is enough.
 - At `vs_rules`, `CLASS 250cc` is the fourth `RIGHT` from the default `50cc`.

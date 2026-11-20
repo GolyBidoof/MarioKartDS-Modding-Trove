@@ -1,7 +1,7 @@
 # Mario Kart DS Modding Trove
 # tools/nds.py — NDS/Nitro readers (BLZ, ARM9, FNT/FAT, NARC)
 # SPDX-License-Identifier: MIT
-# Format notes: docs/nitro.md, docs/arm9-autoloads.md
+# Format notes: docs/generic/nitro.md, docs/arm9-autoloads.md
 """Minimal NDS/Nitro readers: BLZ, ARM9, ROM file table, NARC."""
 from __future__ import annotations
 
@@ -250,3 +250,28 @@ def unpack_narc(data: bytes) -> dict[str, bytes]:
     for i, (start, end) in enumerate(entries):
         out[names[i]] = data[data_base + start:data_base + end]
     return out
+
+
+def overlay_from_nds(path: str, overlay_id: int) -> tuple[int, bytes]:
+    """Return ``(load_address, decompressed_bytes)`` for an ARM9 overlay.
+
+    The overlay table entry stores a FAT file id and a compressed flag.  The
+    returned bytes are ready to index by ``runtime_address - load_address``.
+    """
+    with open(path, "rb") as f:
+        data = f.read()
+    ovt = u32(data, 0x50)
+    ovt_size = u32(data, 0x54)
+    fat = u32(data, 0x48)
+    for i in range(ovt_size // 32):
+        entry = ovt + i * 32
+        oid, ram, _size, _bss, _s, _e, file_id, flags = struct.unpack_from(
+            "<IIIIIIII", data, entry)
+        if oid != overlay_id:
+            continue
+        start, end = struct.unpack_from("<II", data, fat + 8 * file_id)
+        blob = data[start:end]
+        if flags & 0x01000000:
+            blob = blz_decompress(blob)
+        return ram, blob
+    raise ValueError(f"overlay {overlay_id} not found in {path}")

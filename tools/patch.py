@@ -1,10 +1,10 @@
 # Mario Kart DS Modding Trove
 # tools/patch.py — NCPatcher project, conflicts and verification
 # SPDX-License-Identifier: MIT
-# Notes: docs/nitro.md, docs/bmg.md
+# Notes: docs/generic/nitro.md, docs/mkds/bmg.md
 """Locate the public toolchain and drive NCPatcher.
 
-Background: docs/nitro.md (ROM/archive formats), docs/bmg.md (BMG repair).
+Background: docs/generic/nitro.md (ROM/archive formats), docs/mkds/bmg.md (BMG repair).
 Mod-specific detection lives with the mod (see mods/options-cc/profile.py).
 """
 from __future__ import annotations
@@ -182,7 +182,11 @@ def render_mod_sources(mod: Mod, profile: object,
                                    for k, v in source.when.items()):
             continue
         text = render(mod.source_text(source), context)
-        rendered.append((f"{mod.id}/{Path(source.file).stem}", text))
+        rel = Path(source.file)
+        parts = [p for p in rel.parent.parts if p != "source"]
+        name = rel.name[:-5] if rel.name.endswith(".tmpl") else rel.name
+        target = str(Path(mod.id, *parts, name))
+        rendered.append((target, text))
     return rendered
 
 
@@ -270,6 +274,17 @@ def write_ncp_project(tools: Tools, work: Path, rom: Path, output: Path,
         for dest, path in bmg_files:
             lines.append(f"  {_q(dest)}: {_q(path.resolve())}")
         lines.append("")
+    main_files = []
+    overlay_files: dict[str, list[str]] = {}
+    for name, _ in sources:
+        if Path(name).suffix.lower() not in {".c", ".s", ".S"}:
+            continue
+        parts = Path(name).parts
+        if len(parts) >= 3 and re.fullmatch(r"ov\d+", parts[1]):
+            overlay_files.setdefault(parts[1], []).append(name)
+        else:
+            main_files.append(name)
+
     lines += [
         "targets:",
         "  arm9:",
@@ -285,9 +300,17 @@ def write_ncp_project(tools: Tools, work: Path, rom: Path, output: Path,
         "    regions:",
         "      - dest: main",
         "        sources:",
-        f"          - {_q(str(source) + '/**')}",
-        "",
     ]
+    for name in main_files:
+        lines.append(f"          - {_q(str(source / name))}")
+    for overlay, names in sorted(overlay_files.items()):
+        lines += [
+            f"      - dest: {overlay}",
+            "        sources:",
+        ]
+        for name in names:
+            lines.append(f"          - {_q(str(source / name))}")
+    lines.append("")
     (ncp / "ncpatcher.yaml").write_text("\n".join(lines))
     return ncp
 
@@ -314,6 +337,7 @@ class ModContext:
     base: int
     new_ids: list[int]
     tools: Tools
+    rom_path: Path | None = None
 
     def u16(self, address: int) -> int:
         try:
@@ -361,7 +385,7 @@ def _load_module(path: Path, name: str):
     return module
 
 
-def load_profile(mod: Mod, arm9: bytes, base: int):
+def load_profile(mod: Mod, arm9: bytes, base: int, rom_path=None):
     if not mod.profile:
         raise ToolError(f"mod {mod.id!r} has no profile detector")
     path = mod.path / mod.profile
@@ -369,6 +393,9 @@ def load_profile(mod: Mod, arm9: bytes, base: int):
     detect = getattr(module, "detect", None)
     if detect is None:
         raise ToolError(f"{path} has no detect(arm9, base) function")
+    import inspect
+    if len(inspect.signature(detect).parameters) >= 3:
+        return detect(arm9, base, rom_path)
     return detect(arm9, base)
 
 

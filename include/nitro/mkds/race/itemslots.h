@@ -1,0 +1,63 @@
+/* itemslots.h — ItemSlotList.dat tables. SPDX-License-Identifier: MIT */
+#pragma once
+
+#include <stddef.h>
+#include <stdint.h>
+
+#define MKDS_ITEM_SLOT_COLUMNS 18u
+#define MKDS_ITEM_SLOT_CHARACTERS MKDS_ITEM_SLOT_COLUMNS
+#define MKDS_ITEM_SLOT_HEADER_SIZE 2u
+#define MKDS_ITEM_SLOT_MAX_WEIGHT 200u
+
+typedef enum {
+    MKDS_ITEM_SLOT_BLOCK_RACE_DEFAULT = 0,
+    MKDS_ITEM_SLOT_BLOCK_RACE_ALTERNATE = 1,
+    MKDS_ITEM_SLOT_BLOCK_UNUSED_2 = 2,
+    MKDS_ITEM_SLOT_BLOCK_UNUSED_3 = 3,
+    MKDS_ITEM_SLOT_BLOCK_BATTLE_OVERRIDE_AND_VS_DEFAULT = 4,
+    MKDS_ITEM_SLOT_BLOCK_BATTLE_DEFAULT_AND_VS_ALTERNATE = 5,
+    MKDS_ITEM_SLOT_BLOCK_ITEM_BOX_OVERRIDE = 6,
+    MKDS_ITEM_SLOT_BLOCK_BATTLE_SHORT_DEFAULT = 7,
+    MKDS_ITEM_SLOT_BLOCK_BATTLE_SHORT_ALTERNATE = 8,
+    MKDS_ITEM_SLOT_BLOCK_UNUSED_9 = 9,
+    MKDS_ITEM_SLOT_BLOCK_UNUSED_10 = 10,
+    MKDS_ITEM_SLOT_BLOCK_COUNT = 11
+} MkdsItemSlotBlockRole;
+
+#define MKDS_ITEM_SLOT_OVERRIDE_BLOCK MKDS_ITEM_SLOT_BLOCK_ITEM_BOX_OVERRIDE
+#define MKDS_ITEM_SLOT_OVERRIDE_ROWS 16u
+
+typedef enum MkdsItemSlotColumn {
+    MKDS_ITEM_SLOT_GREEN_SHELL = 0,
+    MKDS_ITEM_SLOT_RED_SHELL = 1,
+    MKDS_ITEM_SLOT_BANANA = 2,
+    MKDS_ITEM_SLOT_FAKE_ITEM_BOX = 3,
+    MKDS_ITEM_SLOT_MUSHROOM = 4,
+    MKDS_ITEM_SLOT_TRIPLE_MUSHROOM = 5,
+    MKDS_ITEM_SLOT_BOMB = 6,
+    MKDS_ITEM_SLOT_BLUE_SHELL = 7,
+    MKDS_ITEM_SLOT_LIGHTNING = 8,
+    MKDS_ITEM_SLOT_TRIPLE_GREEN_SHELL = 9,
+    MKDS_ITEM_SLOT_TRIPLE_BANANA = 10,
+    MKDS_ITEM_SLOT_TRIPLE_RED_SHELL = 11,
+    MKDS_ITEM_SLOT_STAR = 12,
+    MKDS_ITEM_SLOT_GOLDEN_MUSHROOM = 13,
+    MKDS_ITEM_SLOT_BULLET_BILL = 14,
+    MKDS_ITEM_SLOT_BLOOPER = 15,
+    MKDS_ITEM_SLOT_BOO = 16,
+    MKDS_ITEM_SLOT_ITEM_BOX = 17
+} MkdsItemSlotColumn;
+
+typedef uint8_t MkdsItemSlotWeight;
+
+typedef struct {
+    uint8_t slot_count;
+    uint8_t column_count;
+} MkdsItemSlotBlockHeader;
+
+_Static_assert(sizeof(MkdsItemSlotBlockHeader) == MKDS_ITEM_SLOT_HEADER_SIZE, "item slot block");
+_Static_assert(MKDS_ITEM_SLOT_COLUMNS == 18u, "item slot column count");
+_Static_assert(MKDS_ITEM_SLOT_ITEM_BOX ==
+                   MKDS_ITEM_SLOT_COLUMNS - 1u,
+               "item slot last column");
+_Static_assert(MKDS_ITEM_SLOT_BLOCK_COUNT == 11u, "item slot block count");

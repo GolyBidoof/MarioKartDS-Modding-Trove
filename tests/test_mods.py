@@ -103,6 +103,23 @@ class ModTests(unittest.TestCase):
         self.assertEqual(profile.ENGINE["drift"]["50"], -40)
         self.assertEqual(profile.ENGINE["drift"]["100"], -20)
 
+    def test_overlay_sources_get_their_own_region(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            work = root / "work"
+            work.mkdir()
+            tools = patch.Tools(ncpatcher=Path("/bin/true"), sdk=root,
+                                toolchain_bin=None)
+            ncp = patch.write_ncp_project(
+                tools, work, root / "rom.nds", root / "out.nds",
+                [("m/main/a.s", ""), ("m/ov1/b.s", ""), ("m/header.h", "")],
+                [])
+            text = (ncp / "ncpatcher.yaml").read_text()
+            self.assertIn("dest: main", text)
+            self.assertIn("dest: ov1", text)
+            self.assertIn("m/ov1/b.s", text)
+            self.assertNotIn("m/header.h", text)
+
     def test_two_mods_get_distinct_bmg_ids(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

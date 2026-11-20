@@ -1,7 +1,7 @@
 # Mario Kart DS Modding Trove
 # tools/bmgset.py — multi-mod BMG label planning (per-language)
 # SPDX-License-Identifier: MIT
-# BMG notes: docs/bmg.md
+# BMG notes: docs/mkds/bmg.md
 """Combine the BMG edits of several independent mods.
 
 Each mod owns a default label set and optional per-language overrides.  The

@@ -1,7 +1,7 @@
 # Mario Kart DS Modding Trove
 # tools/bmg.py — BMG (MESG/bmg1) reader, repair and append
 # SPDX-License-Identifier: MIT
-# Format notes: docs/bmg.md
+# Format notes: docs/mkds/bmg.md
 """Read and rewrite MESG/bmg1 message banks without storing game data.
 
 Repairs the four-byte-short INF1 layout left by older appenders.  Labels are
@@ -35,16 +35,67 @@ def _p32(value: int) -> bytes:
     return struct.pack("<I", value)
 
 
+# MKDS message escapes start with U+001A. The tag determines the total length
+# in UTF-16 code units. The arguments may contain U+0000, so a plain
+# NUL-terminated decode truncates messages such as mission objectives.
+_ESCAPE_LENGTHS = {
+    0xFF08: 4,   # 0x1A, tag, 32-bit argument
+    0x0108: 4,   # 0x1A, tag, two 16-bit arguments
+    0x0106: 3,   # 0x1A, tag, one 16-bit argument
+}
+
+
 def _decode(data: bytes, off: int, encoding: int) -> str:
     if encoding == 2:
+        out: list[str] = []
         end = off
-        while end + 1 < len(data) and data[end:end + 2] != b"\0\0":
+        while end + 1 < len(data):
+            unit = _u16(data, end)
+            if unit == 0:
+                break
+            if unit == 0x1A and end + 3 < len(data):
+                tag = _u16(data, end + 2)
+                length = _ESCAPE_LENGTHS.get(tag, 2)
+                if end + 2 * length > len(data):
+                    break
+                for index in range(length):
+                    out.append(chr(_u16(data, end + 2 * index)))
+                end += 2 * length
+                continue
+            out.append(chr(unit))
             end += 2
-        return data[off:end].decode("utf-16-le", "replace")
+        return "".join(out)
     end = data.find(b"\0", off)
     if end < 0:
         end = len(data)
     return data[off:end].decode("latin-1")
+
+
+def render_message(text: str) -> str:
+    """Replace binary escapes with readable markers for dumps and headers."""
+    out: list[str] = []
+    index = 0
+    while index < len(text):
+        unit = ord(text[index])
+        if unit == 0x1A and index + 1 < len(text):
+            tag = ord(text[index + 1])
+            length = _ESCAPE_LENGTHS.get(tag, 2)
+            args = [ord(char) for char in text[index + 2:index + length]]
+            if tag == 0xFF08 and len(args) >= 2:
+                value = args[0] | (args[1] << 16)
+                marker = f"<1A:{tag:04X}:{value}>"
+            elif tag == 0x0108 and len(args) >= 2:
+                marker = f"<1A:{tag:04X}:{args[0]:04X},{args[1]:04X}>"
+            elif tag == 0x0106 and args:
+                marker = f"<1A:{tag:04X}:{args[0]:04X}>"
+            else:
+                marker = "<1A:%04X>" % tag
+            out.append(marker)
+            index += length
+            continue
+        out.append(text[index])
+        index += 1
+    return "".join(out)
 
 
 def _encode(text: str, encoding: int) -> bytes:

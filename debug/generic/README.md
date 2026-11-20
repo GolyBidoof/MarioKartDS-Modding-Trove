@@ -2,6 +2,8 @@
 
 These files apply to both the static recompilation and melonDS, or to any GDB RSP target.
 
+For end-to-end recipes, start with [`../WORKFLOWS.md`](../WORKFLOWS.md).
+
 ## Files
 
 | Path | Applies to | Purpose |

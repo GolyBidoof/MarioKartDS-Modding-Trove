@@ -17,6 +17,8 @@ They originate in [DS-Kart-Recompiled](https://github.com/AlonsoTlol/DS-Kart-Rec
 | `examples/host_example.c` | minimal host adapter template |
 | `examples/bmp.c` / `bmp.h` | optional BGRA BMP writer/crop helper |
 | `examples/scenario_example.py` | example scenario |
+| `../examples/menu_flow.py` | pause, menu assertion, both-screen capture, one navigation step |
+| `../WORKFLOWS.md` | end-to-end debug recipes and field notes |
 | `native/` | process-level lldb/gdb for recompiled C |
 | `Makefile` | compile check |
 

@@ -1341,6 +1341,16 @@ void dbg_check_breakpoint(int cpu, uint32_t address)
     {
         if (g_breakpoints[i] != aligned)
             continue;
+        /* Report the breakpoint target as PC. The recomp stops before the
+           callee prologue runs, so c->func still names the caller. */
+        DbgCpu state;
+        if (g_host.get_regs && g_host.set_regs &&
+            g_host.get_regs(g_host.user, cpu, &state))
+        {
+            state.func = aligned;
+            state.r[15] = aligned;
+            g_host.set_regs(g_host.user, cpu, &state);
+        }
         g_breakpoint_hit = aligned;
         g_stop_reason = 5;
         g_stop_cpu = cpu;
@@ -2046,17 +2056,9 @@ static int gdb_handle_packet(dbg_socket socket, char *packet, int cpu)
     if (!strncmp(packet, "vCont;", 6))
     {
         if (packet[6] == 'c')
-        {
-            if (!gdb_send_text(socket, "OK"))
-                return 0;
             return gdb_continue(socket, cpu, 0, "");
-        }
         if (packet[6] == 's')
-        {
-            if (!gdb_send_text(socket, "OK"))
-                return 0;
             return gdb_continue(socket, cpu, 1, "");
-        }
         g_paused = 1;
         g_stop_reason = GDB_SIGNAL_INT;
         g_stop_cpu = cpu;

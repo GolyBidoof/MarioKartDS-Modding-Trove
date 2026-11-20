@@ -41,6 +41,7 @@ The generic headers and format notes are independent declarations of publicly do
 
 - **GBATEK** (Martin Korth) — NDS header, FNT/FAT, overlays and compression: https://problemkaputt.de/gbatek.htm
 - **ndstool** (devkitPro) — NDS/NitroFS filesystem tooling: https://github.com/devkitPro/ndstool
+- **ndspy** (RoadrunnerWMC) — Nitro sound container layout reference, MIT: https://github.com/RoadrunnerWMC/ndspy
 - **Mario Kart Toolbox** (HaroohiePals) — archive and BMG data model: https://github.com/HaroohiePals/MarioKartToolbox
 - **NCPatcher** (TheGameratorT) — Nitro archive patching: https://github.com/TheGameratorT/NCPatcher
 
